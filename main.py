@@ -10,9 +10,12 @@ import tensorflow.keras.preprocessing as preprocessing
 import tensorflow.keras.regularizers as regularizers
 import tensorflow.keras.utils as utils
 
+import dnns
+
 # create argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--epochs', type = int, default = 350, help = 'total number of epochs')
+parser.add_argument('-m', '--model', type = str, default = 'c3', help = 'model architecture to train. allowed values are [a-c][0-3]')
 
 args = parser.parse_args()
 
@@ -30,42 +33,46 @@ y_test = utils.to_categorical(y_test, 10)
 datagen = preprocessing.image.ImageDataGenerator(zca_whitening = True, width_shift_range = 0.05, height_shift_range = 0.05, horizontal_flip = True)
 datagen.fit(x_train)
 
-# define model
-def allconvnet(input_shape):
-    '''all convolutional neural network'''
-    x_init = layers.Input(input_shape)
-    x = layers.Dropout(0.2)(x_init)
-
-    x = layers.Conv2D(96, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Conv2D(96, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Conv2D(96, (3, 3), strides = (2, 2), activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Dropout(0.5)(x)
-
-    x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Conv2D(192, (3, 3), strides = (2, 2), activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Dropout(0.5)(x)
-
-    x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.Conv2D(192, (1, 1), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-
-    x = layers.Conv2D(10, (1, 1), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.GlobalAveragePooling2D()(x)
-
-    x = layers.Flatten()(x)
-    x = layers.Dense(10, activation = 'softmax')(x)
-
-    model = models.Model(inputs = x_init, outputs = x)
-
-    return model
-
 # create session
 gpu_options = tf.GPUOptions(allow_growth = True)
 sess = tf.Session(config = tf.ConfigProto(gpu_options = gpu_options))
 K.set_session(sess)
 
 # instantiate model
-model = allconvnet((32, 32, 3))
+input_shape = (32, 32, 3)
+
+# base nets
+if args.model == 'a0':
+    model = dnns.base_net_a(input_shape)
+elif args.model == 'b0':
+    model = dnns.base_net_b(input_shape)
+elif args.model == 'c0':
+    model = dnns.base_net_c(input_shape)
+
+# strided cnns
+elif args.model == 'a1':
+    model = dnns.strided_cnn_a(input_shape)
+elif args.model == 'b1':
+    model = dnns.strided_cnn_b(input_shape)
+elif args.model == 'c1':
+    model = dnns.strided_cnn_c(input_shape)
+
+# conv pool nets
+elif args.model == 'a2':
+    model = dnns.conv_pool_cnn_a(input_shape)
+elif args.model == 'b2':
+    model = dnns.conv_pool_cnn_b(input_shape)
+elif args.model == 'c2':
+    model = dnns.conv_pool_cnn_c(input_shape)
+
+# all conv nets
+elif args.model == 'a3':
+    model = dnns.all_conv_net_a(input_shape)
+elif args.model == 'b3':
+    model = dnns.all_conv_net_b(input_shape)
+else:
+    model = dnns.all_conv_net_c(input_shape)
+
 model.summary()
 
 # compile model
