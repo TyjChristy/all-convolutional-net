@@ -27,7 +27,7 @@ y_train = utils.to_categorical(y_train, 10)
 y_test = utils.to_categorical(y_test, 10)
 
 # augment data
-datagen = preprocessing.image.ImageDataGenerator(featurewise_center = True, featurewise_std_normalization = True, zca_whitening = True, width_shift_range = 0.05, height_shift_range = 0.05, horizontal_flip = True)
+datagen = preprocessing.image.ImageDataGenerator(zca_whitening = True, width_shift_range = 0.05, height_shift_range = 0.05, horizontal_flip = True)
 datagen.fit(x_train)
 
 # define model
@@ -72,7 +72,7 @@ model.summary()
 model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
 # train model
-model.fit_generator(datagen.flow(x_train, y_train, batch_size = 128), epochs = args.epochs, validation_data = (x_test, y_test))
+model.fit_generator(datagen.flow(x_train, y_train, batch_size = 32), epochs = args.epochs, validation_data = (x_test, y_test))
 
 # save model
 model.save('model.h5')
