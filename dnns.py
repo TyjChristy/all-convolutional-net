@@ -16,7 +16,7 @@ def base_net_a(input_shape):
     x = layers.Dropout(0.5)(x)
 
     x = layers.Conv2D(192, (5, 5), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), pading = 'same')(x)
+    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), padding = 'same')(x)
     x = layers.Dropout(0.5)(x)
 
     x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
