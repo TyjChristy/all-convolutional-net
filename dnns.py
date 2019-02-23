@@ -66,7 +66,7 @@ def conv_pool_cnn_a(input_shape):
 
     x = layers.Conv2D(192, (5, 5), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
     x = layers.Conv2D(96, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), pading = 'same')(x)
+    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), padding = 'same')(x)
     x = layers.Dropout(0.5)(x)
 
     x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
@@ -118,7 +118,7 @@ def base_net_b(input_shape):
 
     x = layers.Conv2D(192, (5, 5), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
     x = layers.Conv2D(192, (1, 1), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), pading = 'same')(x)
+    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), padding = 'same')(x)
     x = layers.Dropout(0.5)(x)
 
     x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
@@ -172,7 +172,7 @@ def conv_pool_cnn_b(input_shape):
     x = layers.Conv2D(192, (5, 5), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
     x = layers.Conv2D(192, (1, 1), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
     x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
-    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), pading = 'same')(x)
+    x = layers.MaxPool2D(pool_size = (3, 3), strides = (2, 2), padding = 'same')(x)
     x = layers.Dropout(0.5)(x)
 
     x = layers.Conv2D(192, (3, 3), padding = 'same', activation = 'relu', kernel_regularizer = regularizers.l2(0.001))(x)
