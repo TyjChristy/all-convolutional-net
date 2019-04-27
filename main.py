@@ -14,8 +14,17 @@ import dnns
 
 # create argument parser
 parser = argparse.ArgumentParser()
-parser.add_argument('-e', '--epochs', type = int, default = 350, help = 'total number of epochs')
-parser.add_argument('-m', '--model', type = str, default = 'c3', help = 'model architecture to train. allowed values are [a-c][0-3]')
+parser.add_argument('-e',
+                    '--epochs',
+                    type=int,
+                    default=350,
+                    help='total number of epochs')
+parser.add_argument(
+    '-m',
+    '--model',
+    type=str,
+    default='c3',
+    help='model architecture to train. allowed values are [a-c][0-3]')
 
 args = parser.parse_args()
 
@@ -30,12 +39,15 @@ y_train = utils.to_categorical(y_train, 10)
 y_test = utils.to_categorical(y_test, 10)
 
 # augment data
-datagen = preprocessing.image.ImageDataGenerator(zca_whitening = True, width_shift_range = 0.05, height_shift_range = 0.05, horizontal_flip = True)
+datagen = preprocessing.image.ImageDataGenerator(zca_whitening=True,
+                                                 width_shift_range=0.05,
+                                                 height_shift_range=0.05,
+                                                 horizontal_flip=True)
 datagen.fit(x_train)
 
 # create session
-gpu_options = tf.GPUOptions(allow_growth = True)
-sess = tf.Session(config = tf.ConfigProto(gpu_options = gpu_options))
+gpu_options = tf.GPUOptions(allow_growth=True)
+sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 K.set_session(sess)
 
 # instantiate model
@@ -76,10 +88,14 @@ else:
 model.summary()
 
 # compile model
-model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
 
 # train model
-model.fit_generator(datagen.flow(x_train, y_train, batch_size = 32), epochs = args.epochs, validation_data = (x_test, y_test))
+model.fit_generator(datagen.flow(x_train, y_train, batch_size=32),
+                    epochs=args.epochs,
+                    validation_data=(x_test, y_test))
 
 # save model
 model.save('model.h5')
